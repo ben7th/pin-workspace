@@ -1,5 +1,5 @@
-%ul
-  %li
-    =tabs_link_to '工作空间列表',workspaces_path
-    =tabs_link_to '讨论话题',''
-    =tabs_link_to '讨论过程版本',''
+- if action_name == "show"
+  %ul
+    %li
+      =tabs_link_to '空间首页',pin_url_for("pin-workspace","workspaces/#{@workspace.id}")
+      =tabs_link_to '讨论话题',pin_url_for("discuss","workspaces/#{@workspace.id}/documents")
