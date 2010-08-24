@@ -2,14 +2,18 @@
 
 # Your secret key for verifying cookie session data integrity.
 # If you change this key, all old sessions will become invalid!
-# Make sure the secret is at least 30 characters and all random, 
+# Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-ActionController::Base.session = {
-  :key         => '_pin-workspace_session',
-  :secret      => '53e8022f340999aff6eef91c58156f66a389f30bb436966eab65e6536c0940c439b68357cd012573dcbe7e2863f05d046c2568a83f21380e1da18a875c155a93'
-}
 
-# Use the database for sessions instead of the cookie-based default,
-# which shouldn't be used to store highly confidential information
-# (create the session table with "rake db:sessions:create")
-# ActionController::Base.session_store = :active_record_store
+case RAILS_ENV
+when 'production'
+  ActionController::Base.session = {
+    :key=>'_mindpin_ei_session',
+    :secret=>'883abe7844502ee307e376fa4d0509253d7f9e55fc8be69a934735cd470cc8671af39e27482885960f3364fa8af420b5519571193e22987c3e9e4f9da29f15fb'
+  }
+else
+  ActionController::Base.session = {
+    :key=>'_mindpin_ei_session_dev',
+    :secret=>'883abe7844502ee307e376fa4d0509253d7f9e55fc8be69a934735cd470cc8671af39e27482885960f3364fa8af420b5519571193e22987c3e9e4f9da29f15fb'
+  }
+end
