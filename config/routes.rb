@@ -40,4 +40,6 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing or commenting them out if you're using named routes and resources.
 
   map.root :controller => "workspaces"
+
+  map.resources :workspaces
 end
