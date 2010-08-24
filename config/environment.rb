@@ -24,6 +24,8 @@ Rails::Initializer.run do |config|
   config.gem "pie-ui"
   config.gem "nokogiri"
   config.gem "haml"
+  config.gem "grit"
+  config.gem "pie-repo"
 
   
   # Only load the plugins named here, in the order given (default is alphabetical).
