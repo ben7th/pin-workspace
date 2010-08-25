@@ -14,4 +14,6 @@ class Workspace < ActiveRecord::Base
       base.has_many :workspaces
     end
   end
+
+  include Membership::WorkspaceMethods
 end
