@@ -1,18 +1,17 @@
 development:
   name: pin-workspace
   url: http://192.168.1.8:6006/
-  master_url: http://192.168.1.8:6001/
-  ui_url:  http://192.168.1.8:3000/
+  master_url: http://192.168.1.8:3000/
   git_repo_path: /root/mindpin_base/git_repo
 
 test:
   name: pin-workspace
   url: http://192.168.1.8:6006/
-  master_url: http://192.168.1.8:6001/
+  master_url: http://192.168.1.8:3000/
   git_repo_path: /root/mindpin_base/git_repo
 
 production:
   name: pin-workspace
   url: http://192.168.1.8:6006/
-  master_url: http://192.168.1.8:6001/
+  master_url: http://192.168.1.8:3000/
   git_repo_path: /root/mindpin_base/git_repo
