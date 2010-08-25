@@ -1,1 +1,5 @@
-欢迎来到工作空间"#{@workspace.name}"
+%div 欢迎来到工作空间"#{@workspace.name}"
+%div 成员列表
+
+-@workspace.member_emails.each do |email|
+  %div= email

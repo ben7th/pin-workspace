@@ -13,11 +13,6 @@ class Membership < ActiveRecord::Base
   end
 
   module UserMethods
-    def self.included(base)
-      base.has_many :memberships
-      base.has_many :workspaces,:through=>:memberships,:conditions=>["status = ?",Membership::JOINED]
-    end
-
     # user 申请 加入 workspace
     # 第一次申请
     # 重复申请
@@ -58,12 +53,12 @@ class Membership < ActiveRecord::Base
       email = _to_email(user_or_email)
       ms = Membership.find(:first,:conditions=>{:email=>email,:workspace_id=>self.id})
       if ms.blank?
-        return !!Membership.create(:email=>email,:workspace=>self,:status=>Membership::JOINED)
+        return Membership.create(:email=>email,:workspace=>self,:status=>Membership::JOINED)
       end
       if ms.status != Membership::JOINED
-        return ms.update_attributes(:status=>Membership::JOINED)
+        ms.update_attributes(:status=>Membership::JOINED)
       end
-      return false
+      return ms
     end
 
     # 拒绝某用户加入

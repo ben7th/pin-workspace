@@ -41,5 +41,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "workspaces"
 
-  map.resources :workspaces
+  map.resources :workspaces do |workspace|
+    workspace.resources :memberships
+  end
+  map.resources :memberships
 end
