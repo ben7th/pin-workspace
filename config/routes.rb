@@ -42,7 +42,6 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "workspaces"
 
   map.resources :workspaces do |workspace|
-    workspace.resources :memberships
+    workspace.resources :memberships,:collection=>{:add_members_form=>:get,:add_members=>:post}
   end
-  map.resources :memberships
 end
