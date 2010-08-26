@@ -3,6 +3,7 @@ class MembershipsController < ApplicationController
   before_filter :per_load
   def per_load
     @workspace = Workspace.find(params[:workspace_id]) if params[:workspace_id]
+    @membership = Membership.find(params[:id]) if params[:id]
   end
 
   def create
@@ -14,11 +15,14 @@ class MembershipsController < ApplicationController
     end
   end
 
-  def add_members_form
+  def add_members_form;end
+
+  def get_emails
+    params[:emails].split(/,|，|\r?\n/)
   end
 
   def add_members
-    @emails = params[:emails].split(/,|，|\n/)
+    @emails = get_emails
     @message = params[:message]
     # 发送邮件
     @workspace.add_members(@emails)
@@ -26,19 +30,15 @@ class MembershipsController < ApplicationController
     render :template=>"/memberships/add_success"
   end
 
-  def invite_members_form
-  end
+  def invite_members_form;end
 
   def invite_members
-    @emails = params[:emails].split(/,|，|\n/)
+    @emails = get_emails
     @message = params[:message]
     # 发送邮件
     @workspace.invite_members(@emails)
     @emails.each{|email|Mailer.deliver_invite_to_workspace(@workspace,@message,email)}
     render :template=>"/memberships/invite_success"
-  end
-
-  def add_success
   end
 
   def quit
@@ -56,5 +56,22 @@ class MembershipsController < ApplicationController
     end
     render :template=>"/memberships/already_joined"
   end
+
+  def apply_join
+    current_user.apply_join(@workspace)
+    redirect_to @workspace
+  end
+
+  def approve
+    @membership.approve
+    redirect_to :action=>:members_manage
+  end
+
+  def refuse
+    @membership.refuse
+    redirect_to :action=>:members_manage
+  end
+
+  def members_manage;end
   
 end

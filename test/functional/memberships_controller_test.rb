@@ -40,4 +40,37 @@ class MembershipsControllerTest < ActionController::TestCase
     assert_equal membership.reload.status,Membership::QUIT
   end
 
+  test "用户主动申请加入工作空间" do
+    lucy = users(:lucy)
+    session[:user_id] = lucy.id
+    workspace = workspaces(:workspace_number_one)
+    assert_difference("Membership.count",1) do
+      post :apply_join,:workspace_id=>workspace.id
+    end
+    membership = Membership.last
+    assert_equal membership.status,Membership::APPLY
+  end
+
+  test "同意某人的申请" do
+    lucy = users(:lucy)
+    workspace = workspaces(:workspace_number_one)
+    lucy.apply_join(workspace)
+    membership = Membership.last
+    assert_difference("Membership.count",0) do
+      put :approve,:workspace_id=>workspace.id,:id=>membership.id
+    end
+    assert_equal membership.reload.status,Membership::JOINED
+  end
+
+  test "拒绝某人的申请" do
+    lucy = users(:lucy)
+    workspace = workspaces(:workspace_number_one)
+    lucy.apply_join(workspace)
+    membership = Membership.last
+    assert_difference("Membership.count",0) do
+      put :refuse,:workspace_id=>workspace.id,:id=>membership.id
+    end
+    assert_equal membership.reload.status,Membership::REFUSED
+  end
+
 end

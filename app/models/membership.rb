@@ -1,11 +1,11 @@
 class Membership < ActiveRecord::Base
   belongs_to :workspace
 
-  JOINED = "JOINED" # 正式成员
-  APPLY = "APPLY" # 申请加入
+  JOINED = "JOINED"   # 正式成员
+  APPLY = "APPLY"     # 申请加入
   REFUSED = "REFUSED" # 申请加入被拒绝
-  QUIT = "QUIT" # 退出
-  INVITE = "INVITE" # 邀请
+  QUIT = "QUIT"       # 退出
+  INVITE = "INVITE"   # 邀请
 
   def validate_on_create
     ms = Membership.find(:first,:conditions=>{:email=>self.email,:workspace_id=>self.workspace_id})
@@ -32,6 +32,16 @@ class Membership < ActiveRecord::Base
     self.update_attributes!(:status=>Membership::JOINED)
   end
 
+  # 同意某人的申请
+  def approve
+    self.update_attributes!(:status=>Membership::JOINED)
+  end
+
+  # 拒绝某人的申请
+  def refuse
+    self.update_attributes!(:status=>Membership::REFUSED)
+  end
+
   module UserMethods
     # user 申请 加入 workspace
     # 第一次申请
@@ -42,9 +52,7 @@ class Membership < ActiveRecord::Base
       case true
       when ms.blank?
         !!Membership.create(:email=>self.email,:workspace=>workspace,:status=>Membership::APPLY)
-      when ms.status == Membership::APPLY
-        ms.update_attributes(:updated_at=>Time.now)
-      when ms.status == Membership::REFUSED
+      when ms.status != Membership::JOINED
         ms.update_attributes(:status=>Membership::APPLY)
       else
         return false

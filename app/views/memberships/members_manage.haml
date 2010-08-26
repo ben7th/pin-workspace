@@ -1,0 +1,10 @@
+%div 成员列表
+
+-@workspace.member_emails.each do |email|
+  %div= email
+
+-@workspace.apply_memberships.each do |membership|
+  %div
+    =membership.email
+    =link_to "同意",approve_workspace_membership_path(@workspace,membership),:method=>:put
+    =link_to "拒绝",refuse_workspace_membership_path(@workspace,membership),:method=>:put
