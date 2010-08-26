@@ -1,11 +1,12 @@
 class Membership < ActiveRecord::Base
   belongs_to :workspace
 
-  JOINED = "JOINED"   # 正式成员
-  APPLY = "APPLY"     # 申请加入
-  REFUSED = "REFUSED" # 申请加入被拒绝
-  QUIT = "QUIT"       # 退出
-  INVITE = "INVITE"   # 邀请
+  JOINED  = "JOINED"    # 正式成员
+  APPLY   = "APPLY"     # 申请加入
+  REFUSED = "REFUSED"   # 申请加入被拒绝
+  QUIT    = "QUIT"      # 退出
+  INVITE  = "INVITE"    # 邀请
+  BANED  = "BANED"    # 禁止了，加入了黑名单
 
   def validate_on_create
     ms = Membership.find(:first,:conditions=>{:email=>self.email,:workspace_id=>self.workspace_id})
@@ -28,8 +29,9 @@ class Membership < ActiveRecord::Base
 
   # 已经加入的 返回false
   def join
-    return false if self.status == Membership::JOINED
-    self.update_attributes!(:status=>Membership::JOINED)
+    return "已经加入" if self.status == Membership::JOINED
+    return "无法申请" if self.status == Membership::BANED
+    return "加入成功" if self.update_attributes!(:status=>Membership::JOINED)
   end
 
   # 同意某人的申请
@@ -42,6 +44,16 @@ class Membership < ActiveRecord::Base
     self.update_attributes!(:status=>Membership::REFUSED)
   end
 
+  # 将某人拉入黑名单
+  def ban
+    self.update_attributes!(:status=>Membership::BANED)
+  end
+
+  # 把某人从黑名单中解救出来
+  def unban
+    self.update_attributes!(:status=>Membership::JOINED)
+  end
+
   module UserMethods
     # user 申请 加入 workspace
     # 第一次申请
@@ -52,7 +64,7 @@ class Membership < ActiveRecord::Base
       case true
       when ms.blank?
         !!Membership.create(:email=>self.email,:workspace=>workspace,:status=>Membership::APPLY)
-      when ms.status != Membership::JOINED
+      when ms.status != Membership::JOINED && ms.status != Membership::BANED
         ms.update_attributes(:status=>Membership::APPLY)
       else
         return false
@@ -66,6 +78,7 @@ class Membership < ActiveRecord::Base
       base.has_many :memberships
       base.has_many :apply_memberships,:conditions=>["memberships.status = ?",Membership::APPLY],:class_name=>"Membership"
       base.has_many :joined_memberships,:conditions=>["memberships.status = ?",Membership::JOINED],:class_name=>"Membership"
+      base.has_many :baned_memberships,:conditions=>["memberships.status = ?",Membership::BANED],:class_name=>"Membership"
     end
 
     def apply_member_emails
@@ -74,6 +87,10 @@ class Membership < ActiveRecord::Base
 
     def member_emails
       self.joined_memberships.map{|ms| ms.email}
+    end
+
+    def baned_member_emails
+      self.baned_memberships.map{|ms| ms.email}
     end
 
     # 增加成员：直接增加，同意申请

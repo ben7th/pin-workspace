@@ -45,6 +45,6 @@ ActionController::Routing::Routes.draw do |map|
     workspace.resources :memberships,
       :collection=>{:add_members_form=>:get,:add_members=>:post,:invite_members_form=>:get,:invite_members=>:post,
         :quit=>:get,:join=>:get,:apply_join=>:post,:members_manage=>:get},
-      :member=>{:approve=>:put,:refuse=>:put}
+      :member=>{:approve=>:put,:refuse=>:put,:kick_out=>:put,:ban=>:put,:unban=>:put}
   end
 end

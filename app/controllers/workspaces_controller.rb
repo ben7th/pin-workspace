@@ -9,9 +9,7 @@ class WorkspacesController < ApplicationController
     @workspaces = current_user.workspaces
   end
 
-  def show
-    
-  end
+  def show;end
 
   def new
     render_ui.fbox :show,:partial=>[:form,Workspace.new],:title=>"新建工作空间"

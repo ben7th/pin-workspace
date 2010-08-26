@@ -73,4 +73,41 @@ class MembershipsControllerTest < ActionController::TestCase
     assert_equal membership.reload.status,Membership::REFUSED
   end
 
+  test "把某人从工作空间中剔除" do
+    lucy = users(:lucy)
+    session[:user_id] = users(:lifei)
+    workspace = workspaces(:workspace_number_one)
+    workspace.add_member(lucy)
+    membership = Membership.last
+    assert_difference("Membership.count",0) do
+      put :kick_out,:workspace_id=>workspace.id,:id=>membership.id
+    end
+    assert_equal membership.reload.status,Membership::QUIT
+  end
+
+  test "把某人从工作空间联系人列表中，踢到黑名单,然后在解救出来（闲的蛋疼是也）" do
+    lucy = users(:lucy)
+    session[:user_id] = users(:lifei)
+    workspace = workspaces(:workspace_number_one)
+    workspace.add_member(lucy)
+    membership = Membership.last
+    assert_difference("Membership.count",0) do
+      put :ban,:workspace_id=>workspace.id,:id=>membership.id
+    end
+    assert_equal membership.reload.status,Membership::BANED
+
+    # 加入黑名单之后，再声请加入是无效的
+    code = membership.uuid_code
+    get :join,:code=>code,:workspace_id=>workspace.id
+    assert_equal membership.reload.status,Membership::BANED
+    # 申请也是无效的
+    lucy.apply_join(workspace)
+    assert_equal membership.reload.status,Membership::BANED
+    
+    assert_difference("Membership.count",0) do
+      put :unban,:workspace_id=>workspace.id,:id=>membership.id
+    end
+    assert_equal membership.reload.status,Membership::JOINED
+  end
+
 end

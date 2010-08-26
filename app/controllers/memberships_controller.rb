@@ -51,10 +51,8 @@ class MembershipsController < ApplicationController
 
   def join
     membership = Membership.find_by_uuid_code(params[:code])
-    if membership.join
-      return render :template=>"/memberships/join_success"
-    end
-    render :template=>"/memberships/already_joined"
+    message = membership.join
+    return render :template=>"/memberships/join_result",:locals=>{:message=>message}
   end
 
   def apply_join
@@ -64,14 +62,33 @@ class MembershipsController < ApplicationController
 
   def approve
     @membership.approve
-    redirect_to :action=>:members_manage
+    redirect_to_members_manage
   end
 
   def refuse
     @membership.refuse
-    redirect_to :action=>:members_manage
+    redirect_to_members_manage
   end
 
   def members_manage;end
+
+  def kick_out
+    @membership.quit
+    redirect_to_members_manage
+  end
+
+  def ban
+    @membership.ban
+    redirect_to_members_manage
+  end
+
+  def unban
+    @membership.unban
+    redirect_to_members_manage
+  end
+
+  def redirect_to_members_manage
+    redirect_to :action=>:members_manage
+  end
   
 end
