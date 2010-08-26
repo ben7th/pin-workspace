@@ -26,6 +26,7 @@ Rails::Initializer.run do |config|
   config.gem "haml"
   config.gem "grit"
   config.gem "pie-repo"
+  config.gem "uuidtools"
 
   
   # Only load the plugins named here, in the order given (default is alphabetical).

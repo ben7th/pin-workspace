@@ -1,6 +1,10 @@
 %div
   来自#{@workspace.user.name}的空间欢迎信件
   =@message
-  =link_to "点击进入空间","#{CoreService.project('pin-workspace').url}workspaces/#{@workspace.id}"
+  -join_link = "#{CoreService.project('pin-workspace').url}workspaces/#{@workspace.id}"
+  =link_to join_link,join_link
+
   %p
-  如果链接无法点击，请讲一下地址输入地址栏#{File.join(CoreService.project('pin-workspace').url,"workspaces",@workspace.id.to_s)}
+  如果你不想加入，点击下面这个链接退出此工作空间
+  -quit_link = "#{CoreService.project('pin-workspace').url}workspaces/#{@workspace.id}/memberships/quit?code=#{@membership.uuid_code}"
+  =link_to quit_link,quit_link

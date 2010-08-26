@@ -4,12 +4,32 @@ class Membership < ActiveRecord::Base
   JOINED = "JOINED" # 正式成员
   APPLY = "APPLY" # 申请加入
   REFUSED = "REFUSED" # 申请加入被拒绝
+  QUIT = "QUIT" # 退出
+  INVITE = "INVITE" # 邀请
 
   def validate_on_create
     ms = Membership.find(:first,:conditions=>{:email=>self.email,:workspace_id=>self.workspace_id})
     if !ms.blank?
       errors.add_to_base("不能重复创建")
     end
+  end
+  
+  require 'uuidtools'
+  before_create :set_uuid_code
+  def set_uuid_code
+    self.uuid_code = UUIDTools::UUID.random_create.to_s
+  end
+
+  # 已经退出的 返回false 
+  def quit
+    return false if self.status == Membership::QUIT
+    self.update_attributes!(:status=>Membership::QUIT)
+  end
+
+  # 已经加入的 返回false
+  def join
+    return false if self.status == Membership::JOINED
+    self.update_attributes!(:status=>Membership::JOINED)
   end
 
   module UserMethods
@@ -60,6 +80,19 @@ class Membership < ActiveRecord::Base
     # 增加多个联系人
     def add_members(emails)
       emails.each{|email|add_member(email)}
+    end
+
+    # 邀请多个人
+    def invite_members(emails)
+      emails.each{|email|invite_member(email)}
+    end
+
+    def invite_member(user_or_email)
+      email = _to_email(user_or_email)
+      ms = Membership.find(:first,:conditions=>{:email=>email,:workspace_id=>self.id})
+      return Membership.create(:email=>email,:workspace=>self,:status=>Membership::INVITE) if ms.blank?
+      ms.update_attributes(:status=>Membership::INVITE) if ms.status != Membership::JOINED
+      return ms
     end
 
     # 拒绝某用户加入

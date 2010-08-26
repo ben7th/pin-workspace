@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100825031900) do
+ActiveRecord::Schema.define(:version => 20100826031807) do
 
   create_table "memberships", :force => true do |t|
     t.integer  "workspace_id"
@@ -17,36 +17,7 @@ ActiveRecord::Schema.define(:version => 20100825031900) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "preferences", :force => true do |t|
-    t.integer  "user_id",                          :null => false
-    t.boolean  "auto_popup_msg", :default => true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "show_tooltip",   :default => true
-    t.string   "theme"
-  end
-
-  create_table "users", :force => true do |t|
-    t.string   "name",                      :default => "", :null => false
-    t.string   "hashed_password",           :default => "", :null => false
-    t.string   "salt",                      :default => "", :null => false
-    t.string   "email",                     :default => "", :null => false
-    t.string   "sign"
-    t.string   "activation_code"
-    t.string   "logo_file_name"
-    t.string   "logo_content_type"
-    t.integer  "logo_file_size"
-    t.datetime "logo_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "activated_at"
-    t.string   "reset_password_code"
-    t.datetime "reset_password_code_until"
-    t.boolean  "v09"
-    t.boolean  "v09_up"
-    t.datetime "last_login_time"
+    t.string   "uuid_code"
   end
 
   create_table "workspaces", :force => true do |t|
