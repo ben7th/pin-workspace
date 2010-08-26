@@ -52,13 +52,14 @@ class Membership < ActiveRecord::Base
     def add_member(user_or_email)
       email = _to_email(user_or_email)
       ms = Membership.find(:first,:conditions=>{:email=>email,:workspace_id=>self.id})
-      if ms.blank?
-        return Membership.create(:email=>email,:workspace=>self,:status=>Membership::JOINED)
-      end
-      if ms.status != Membership::JOINED
-        ms.update_attributes(:status=>Membership::JOINED)
-      end
+      return Membership.create(:email=>email,:workspace=>self,:status=>Membership::JOINED) if ms.blank?
+      ms.update_attributes(:status=>Membership::JOINED) if ms.status != Membership::JOINED
       return ms
+    end
+
+    # 增加多个联系人
+    def add_members(emails)
+      emails.each{|email|add_member(email)}
     end
 
     # 拒绝某用户加入

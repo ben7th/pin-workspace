@@ -7,6 +7,7 @@ class MembershipTest < ActiveSupport::TestCase
     ws = create_workspace(lifei)
     assert_equal ws.member_emails.count,0
 
+    # 增加一个成员
     assert_difference("Membership.count",1) do
       ws.add_member("zhanwairenyuan@mindpin.com")
     end
@@ -14,6 +15,13 @@ class MembershipTest < ActiveSupport::TestCase
     ms = Membership.last
     assert_equal ms.status,Membership::JOINED
     assert_equal ws.member_emails.count,1
+
+    # 增加多个成员
+    assert_difference("Membership.count",3) do
+      ws.add_members(['nyuan@mindpin.com','xaoniao@163.com','zhutou@163.com'])
+    end
+    ws.reload
+    assert_equal ws.member_emails.count,4
   end
 
   test "工作空间管理者给工作空间增加成员" do

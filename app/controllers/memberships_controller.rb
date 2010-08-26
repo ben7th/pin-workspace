@@ -21,6 +21,8 @@ class MembershipsController < ApplicationController
     @emails = params[:emails].split(/,|，|\n/)
     @message = params[:message]
     # 发送邮件
+    @workspace.add_members(@emails)
+    Mailer.deliver_welcome_to_workspace(@workspace,@message,@emails)
     render :action=>:add_success
   end
 

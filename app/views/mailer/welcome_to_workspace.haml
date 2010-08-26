@@ -1,0 +1,6 @@
+%div
+  来自#{@workspace.user.name}的空间欢迎信件
+  =@message
+  =link_to "点击进入空间","#{CoreService.project('pin-workspace').url}workspaces/#{@workspace.id}"
+  %p
+  如果链接无法点击，请讲一下地址输入地址栏#{File.join(CoreService.project('pin-workspace').url,"workspaces",@workspace.id.to_s)}
