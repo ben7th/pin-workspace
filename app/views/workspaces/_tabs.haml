@@ -10,6 +10,6 @@
       =tabs_link_to '增加成员',pin_url_for("pin-workspace","workspaces/#{@workspace.id}/memberships/add_members_form")
     %li
       =tabs_link_to '邀请成员',pin_url_for("pin-workspace","workspaces/#{@workspace.id}/memberships/invite_members_form")
-  -if current_user == @workspace.user
+  -if @workspace && current_user == @workspace.user
     %li
       =tabs_link_to '成员管理',pin_url_for("pin-workspace","workspaces/#{@workspace.id}/memberships/members_manage")
