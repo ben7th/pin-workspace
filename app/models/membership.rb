@@ -29,6 +29,7 @@ class Membership < ActiveRecord::Base
 
   # 已经加入的 返回false
   def join
+    User.create_email_discusser(self.email)
     return "已经加入" if self.status == Membership::JOINED
     return "无法申请" if self.status == Membership::BANED
     return "加入成功" if self.update_attributes!(:status=>Membership::JOINED)
@@ -96,6 +97,7 @@ class Membership < ActiveRecord::Base
     # 增加成员：直接增加，同意申请
     def add_member(user_or_email)
       email = _to_email(user_or_email)
+      User.create_email_discusser(email)
       ms = Membership.find(:first,:conditions=>{:email=>email,:workspace_id=>self.id})
       return Membership.create(:email=>email,:workspace=>self,:status=>Membership::JOINED) if ms.blank?
       ms.update_attributes(:status=>Membership::JOINED) if ms.status != Membership::JOINED

@@ -6,9 +6,14 @@ class MembershipsControllerTest < ActionController::TestCase
     lifei = users(:lifei)
     workspace = workspaces(:workspace_number_one)
     session[:user_id] = lifei.id
-    assert_difference("Membership.count",1) do
+    assert_difference(["User.count","Membership.count"],1) do
       post :add_members,:workspace_id=>workspace.id,:emails=>"chinachengliwen@gmail.com"
     end
+    user = User.last
+    assert_equal user.name,"chinachengliwen@gmail.com"
+    assert_equal user.email,"chinachengliwen@gmail.com"
+    assert_equal user.activated_at,nil
+    
     membership = Membership.last
     assert_equal membership.status,Membership::JOINED 
     assert_equal membership.email,"chinachengliwen@gmail.com"
@@ -32,7 +37,14 @@ class MembershipsControllerTest < ActionController::TestCase
     code = membership.uuid_code
 
     # 该人加入
-    get :join,:code=>code,:workspace_id=>workspace.id
+    assert_difference("User.count",1) do
+      get :join,:code=>code,:workspace_id=>workspace.id
+    end
+    user = User.last
+    assert_equal user.name,"chinachengliwen@gmail.com"
+    assert_equal user.email,"chinachengliwen@gmail.com"
+    assert_equal user.activated_at,nil
+
     assert_equal membership.reload.status,Membership::JOINED
     
     # 该人退出

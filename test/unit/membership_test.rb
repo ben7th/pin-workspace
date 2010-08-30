@@ -8,13 +8,18 @@ class MembershipTest < ActiveSupport::TestCase
     assert_equal ws.member_emails.count,0
 
     # 增加一个成员
-    assert_difference("Membership.count",1) do
+    assert_difference(["User.count","Membership.count"],1) do
       ws.add_member("zhanwairenyuan@mindpin.com")
     end
     ws.reload
     ms = Membership.last
     assert_equal ms.status,Membership::JOINED
     assert_equal ws.member_emails.count,1
+    # 新增加的用户
+    user = User.last
+    assert_equal user.name,"zhanwairenyuan@mindpin.com"
+    assert_equal user.email,"zhanwairenyuan@mindpin.com"
+    assert_equal user.activated_at,nil
 
     # 增加多个成员
     assert_difference("Membership.count",3) do
@@ -30,8 +35,10 @@ class MembershipTest < ActiveSupport::TestCase
     ws = create_workspace(lifei)
     assert_equal ws.member_emails.count,0
 
-    assert_difference("Membership.count",1) do
-      ws.add_member(chengliwen.email)
+    assert_difference("User.count",0) do
+      assert_difference("Membership.count",1) do
+        ws.add_member(chengliwen.email)
+      end
     end
     ws.reload
     ms = Membership.last
@@ -52,8 +59,10 @@ class MembershipTest < ActiveSupport::TestCase
     assert_equal ws.member_emails.count,0
     assert_equal ws.apply_member_emails.count,1
 
-    assert_difference("Membership.count",0) do
-      ws.add_member(chengliwen)
+    assert_difference("User.count",0) do
+      assert_difference("Membership.count",0) do
+        ws.add_member(chengliwen)
+      end
     end
     ws.reload
     ms = Membership.last
