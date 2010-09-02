@@ -1,4 +1,5 @@
 class User < UserBase
+  set_readonly false
   include Workspace::UserMethods
   include Membership::UserMethods
 
