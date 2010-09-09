@@ -1,5 +1,5 @@
 class WorkspacesController < ApplicationController
-
+  before_filter :login_required
   before_filter :per_load
   def per_load
     @workspace = Workspace.find(params[:id]) if params[:id]
