@@ -12,6 +12,6 @@ test:
 
 production:
   name: pin-workspace
-  url: http://2010.mindpin.com/workspace
-  master_url: http://2010.mindpin.com/config
-  git_repo_path: /root/mindpin_base/git_repo
+  url: http://2010.mindpin.com/
+  master_url: http://2010.mindpin.com/
+  git_repo_path: /web/2010/git_repo
