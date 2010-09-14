@@ -97,7 +97,6 @@ class Membership < ActiveRecord::Base
     # 增加成员：直接增加，同意申请
     def add_member(user_or_email)
       email = _to_email(user_or_email)
-      User.create_email_discusser(email)
       ms = Membership.find(:first,:conditions=>{:email=>email,:workspace_id=>self.id})
       return Membership.create(:email=>email,:workspace=>self,:status=>Membership::JOINED) if ms.blank?
       ms.update_attributes(:status=>Membership::JOINED) if ms.status != Membership::JOINED
