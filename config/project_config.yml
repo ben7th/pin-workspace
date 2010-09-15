@@ -1,13 +1,13 @@
 development:
   name: pin-workspace
-  url: http://192.168.1.8:6006/
-  master_url: http://192.168.1.8:3000/
+  url: http://dev.2010.mindpin.com/
+  master_url: http://dev.2010.mindpin.com/
   git_repo_path: /root/mindpin_base/git_repo
 
 test:
   name: pin-workspace
-  url: http://192.168.1.8:6006/
-  master_url: http://192.168.1.8:3000/
+  url: http://dev.2010.mindpin.com/
+  master_url: http://dev.2010.mindpin.com/
   git_repo_path: /root/mindpin_base/git_repo
 
 production:
