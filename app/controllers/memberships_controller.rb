@@ -6,6 +6,16 @@ class MembershipsController < ApplicationController
     @membership = Membership.find(params[:id]) if params[:id]
   end
 
+  before_filter :is_manager,:only=>[
+    :add_members_form,:add_members,:invite_members_form,:invite_members,
+    :approve,:members_manage,:kick_out,:ban,:unban
+    ]
+  def is_manager
+    if current_user != @workspace.user
+      render :status=>500,:text=>"500"
+    end
+  end
+
   def create
     workspace_id = params[:membership][:workspace_id]
     email = params[:membership][:email]
