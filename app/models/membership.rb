@@ -29,7 +29,6 @@ class Membership < ActiveRecord::Base
 
   # 已经加入的 返回false
   def join
-    User.create_email_discusser(self.email)
     return "已经加入" if self.status == Membership::JOINED
     return "无法申请" if self.status == Membership::BANED
     return "加入成功" if self.update_attributes!(:status=>Membership::JOINED)
