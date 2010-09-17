@@ -1,0 +1,4 @@
+.your_workspaces .top-bar {
+  background: -moz-linear-gradient(-90deg, #0770a0, #0ca6dd);
+  background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#0770a0), to(#0ca6dd));
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#0770a0',endColorstr='#0ca6dd'); }
