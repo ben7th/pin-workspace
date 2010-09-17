@@ -1,3 +1,11 @@
+- require_css 'views/workspace',true
+
 .grid_8.push_15
-  =link_to_remote "创建新的工作空间",:url=>new_workspace_path,:method=>:get
-  -mplist @workspaces,:for=>Workspace
+  .your_workspaces
+    .clearfix
+      .fleft.font14.bold
+        工作空间(#{current_user.workspaces.count})
+      .fright
+        =minibutton_remote "新建工作空间",:url=>new_workspace_path,:method=>:get
+    %div
+      -mplist @workspaces,:for=>Workspace

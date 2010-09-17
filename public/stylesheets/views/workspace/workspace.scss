@@ -1,0 +1,7 @@
+@import "misc";
+
+.your_workspaces{
+  .top-bar{
+    @include gradient(#0770a0,#0ca6dd);
+  }
+}
