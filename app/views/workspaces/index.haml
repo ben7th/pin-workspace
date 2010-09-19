@@ -1,10 +1,16 @@
 - require_css 'views/workspace',true
 
-.grid_8.push_15
+.grid_13.push_1
+  -infos = @workspaces.map do |workspace|
+    -DiscussionLogParse.new(workspace).workspace_log_infos
+  -infos.flatten.sort.each do |info|
+    .operate_info
+      =operate_info(info)
+.grid_8.push_1
   .your_workspaces
     .clearfix
       .fleft.font14.bold
-        工作空间(#{current_user.workspaces.count})
+        工作空间(#{@workspaces.count})
       .fright
         =minibutton_remote "新建工作空间",:url=>new_workspace_path,:method=>:get
     %div

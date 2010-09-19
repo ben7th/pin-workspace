@@ -12,5 +12,22 @@ module WorkspacesHelper
       return link_to "申请",apply_join_workspace_memberships_path(workspace),:method=>:post
     end
   end
+
+  def operate_info(info)
+    discussion = Discussion.find(info.discussion_id)
+    workspace = discussion.workspace
+    avatar_str = "#{avatar(info.email,:tiny)} #{info.email}"
+    document = discussion.document
+    discussion_str = link_to document.title,"workspaces/#{discussion.workspace.id}/documents/#{discussion.id} "
+    worksapce_str = link_to workspace.name,"workspaces/#{workspace.id}"
+    text_pin = document.find_text_pin(info.text_pin_id) if !info.text_pin_id.blank?
+    operate_str = case info.operate
+    when 'create' then "创建 话题"
+    when 'reply' then "回复内容 #{text_pin.to_html} 到话题"
+    when 'delete' then "删除了内容 在话题"
+    when 'edit' then "编辑了内容 #{text_pin.to_html} 到话题"
+    end
+    "#{avatar_str}在空间 #{worksapce_str} 中 #{operate_str} #{discussion_str}  #{qdatetime info.date}"
+  end
     
 end
