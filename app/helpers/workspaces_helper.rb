@@ -14,11 +14,10 @@ module WorkspacesHelper
   end
 
   def operate_info(info)
-    discussion = Discussion.find(info.discussion_id)
-    workspace = discussion.workspace
+    workspace = info.workspace
     avatar_str = "#{avatar(info.email,:tiny)} #{info.email}"
-    document = discussion.document
-    discussion_str = link_to document.title,"workspaces/#{discussion.workspace.id}/documents/#{discussion.id} "
+    document = Document.find(:repo_user_id=>workspace.user_id,:repo_name=>workspace.id,:id=>info.discussion_id.to_s)
+    discussion_str = link_to document.title,"workspaces/#{workspace.id}/documents/#{info.discussion_id} "
     worksapce_str = link_to workspace.name,"workspaces/#{workspace.id}"
     text_pin = document.find_text_pin(info.text_pin_id) if !info.text_pin_id.blank?
     operate_str = case info.operate
