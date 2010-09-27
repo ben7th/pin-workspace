@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
 
+  map.root :controller=>"workspaces"
   map.resources :workspaces do |workspace|
     workspace.resources :memberships,
       :collection=>{:add_members_form=>:get,:add_members=>:post,:invite_members_form=>:get,:invite_members=>:post,
