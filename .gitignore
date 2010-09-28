@@ -1,5 +1,4 @@
 log
 nbproject
 db/schema.rb
-config/initializers/session_store.rb
 public/.sass-cache
