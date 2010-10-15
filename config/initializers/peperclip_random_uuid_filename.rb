@@ -21,7 +21,7 @@ module Paperclip
       kouzhanming = uploaded_file.original_filename.split(".").last
       base_name = UUIDTools::UUID.random_create.to_s
       # 原始名称存到 title 字段
-      self.title = uploaded_file.original_filename if self.class == FileEntry
+      @instance.title = uploaded_file.original_filename if @instance.class == FileEntry
 
       instance_write(:file_name,       "#{base_name}.#{kouzhanming}".strip  )
       instance_write(:content_type,    uploaded_file.content_type.to_s.strip)

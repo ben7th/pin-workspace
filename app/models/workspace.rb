@@ -16,4 +16,5 @@ class Workspace < ActiveRecord::Base
   end
 
   include Membership::WorkspaceMethods
+  include FileEntry::WorkspceMethods
 end

@@ -1,0 +1,6 @@
+%a{:href=>""}
+  上传文件
+-mindpin_form_for [@workspace,FileEntry.new],:html=>{:multipart=>true} do |f|
+  =f.file_field :content
+  =f.submit "上传"
+-mplist @file_entries,:for=>FileEntry 
