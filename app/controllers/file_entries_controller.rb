@@ -30,5 +30,9 @@ class FileEntriesController < ApplicationController
       redirect_to :action=>'index'
     end
   end
+
+  def upload
+    send_file @file_entry.content.path,:filename=>@file_entry.title
+  end
   
 end
