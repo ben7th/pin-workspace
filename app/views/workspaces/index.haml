@@ -3,12 +3,16 @@
 .grid_13.push_1
   -infos = @workspaces.map do |workspace|
     -DiscussionLogParse.new(workspace).workspace_log_infos
-  -infos.flatten.sort.each do |info|
-    .operate_info
-      =operate_info(info)
+  -if infos.blank?
+    最近没有活动信息
+  -else
+    -infos.flatten.sort.each do |info|
+      .operate_info
+        =operate_info(info)
+
 .grid_8.push_1
   .your_workspaces
-    .clearfix
+    .top-bar.clearfix
       .fleft.font14.bold
         工作空间(#{@workspaces.count})
       .fright
