@@ -1,16 +1,16 @@
 - require_css 'views/workspace',true
 
-.grid_13.push_1
+.grid_15
   -infos = @workspaces.map do |workspace|
     -DiscussionLogParse.new(workspace).workspace_log_infos
-  -if infos.blank?
+  -if infos.flatten.blank?
     最近没有活动信息
   -else
     -infos.flatten.sort.each do |info|
       .operate_info
         =operate_info(info)
 
-.grid_8.push_1
+.grid_8.fright
   .your_workspaces
     .top-bar.clearfix
       .fleft.font14.bold
