@@ -15,18 +15,35 @@ module WorkspacesHelper
 
   def operate_info(info)
     workspace = info.workspace
-    avatar_str = "#{avatar(info.email,:tiny)} #{info.email}"
-    document = Document.find(:repo_user_id=>workspace.user_id,:repo_name=>workspace.id,:id=>info.discussion_id.to_s)
-    discussion_str = link_to document.title,"workspaces/#{workspace.id}/documents/#{info.discussion_id} "
-    worksapce_str = link_to workspace.name,"workspaces/#{workspace.id}"
+    document = Document.find_by_log_info(info)
+    user = User.find_by_email(info.email)
+
+    render :partial=>'workspaces/parts/operation_info',:locals=>{
+      :info=>info,
+      :workspace=>workspace,
+      :document=>document,
+      :user=>user
+    }
+  end
+
+  def operate_str(info)
+    document = Document.find_by_log_info(info)
     text_pin = document.find_text_pin(info.text_pin_id) if !info.text_pin_id.blank?
-    operate_str = case info.operate
-    when 'create' then "创建 话题"
-    when 'reply' then "回复内容 #{text_pin.to_html} 到话题"
-    when 'delete' then "删除了内容 在话题"
-    when 'edit' then "编辑了内容 #{text_pin.to_html} 到话题"
+
+    case info.operate
+      when 'create' then "创建了话题"
+      when 'reply' then "回复内容 #{text_pin.to_html} 到话题"
+      when 'delete' then "删除了内容 在话题"
+      when 'edit' then "编辑了内容 #{text_pin.to_html} 到话题"
     end
-    "#{avatar_str}在空间 #{worksapce_str} 中 #{operate_str} #{discussion_str}  #{qdatetime info.date}"
+  end
+
+  def document_link(document)
+    link_to document.title,pin_url_for('discuss',"workspaces/#{document.discussion.workspace.id}/documents/#{document.id}")
+  end
+
+  def workspace_link(workspace)
+    link_to workspace.name,"workspaces/#{workspace.id}"
   end
     
 end

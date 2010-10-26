@@ -1,14 +1,15 @@
 - require_css 'views/workspace',true
 
 .grid_15
-  -infos = @workspaces.map do |workspace|
-    -DiscussionLogParse.new(workspace).workspace_log_infos
+  -infos = @workspaces.map {|workspace| DiscussionLogParse.new(workspace).workspace_log_infos}
   -if infos.flatten.blank?
-    最近没有活动信息
+    .no-operations
+      最近没有活动信息
   -else
-    -infos.flatten.sort.each do |info|
-      .operate_info
-        =operate_info(info)
+    .operations-list
+      -infos.flatten.sort.each do |info|
+        .operation
+          =operate_info(info)
 
 .grid_8.fright
   .your_workspaces
@@ -17,5 +18,5 @@
         工作空间(#{@workspaces.count})
       .fright
         =minibutton_remote "新建工作空间",:url=>new_workspace_path,:method=>:get
-    %div
+    .workspace-list
       -mplist @workspaces,:for=>Workspace
