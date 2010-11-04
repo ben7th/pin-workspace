@@ -7,6 +7,10 @@ class WorkspacesController < ApplicationController
 
   def index
     @workspaces = current_user.workspaces
+    respond_to do |format|
+      format.json { render :text=>@workspaces.to_json}
+      format.any
+    end
   end
 
   def show;end
