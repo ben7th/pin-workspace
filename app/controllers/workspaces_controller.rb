@@ -16,17 +16,16 @@ class WorkspacesController < ApplicationController
   def show;end
 
   def new
-    render_ui.fbox :show,:partial=>[:form,Workspace.new],:title=>"新建工作空间"
+    @workspace = Workspace.new
   end
 
   def create
-    workspace = Workspace.new(params[:workspace])
-    workspace.user = current_user
-    if workspace.save
-      render_ui.mplist(:insert,workspace,:prex=>"TOP").fbox(:close)
-      return
+    @workspace = Workspace.new(params[:workspace])
+    @workspace.user = current_user
+    if @workspace.save
+      return redirect_to :action=>:index
     end
-    render_ui.fbox :show,:partial=>[:form,workspace],:title=>"新建工作空间"
+    render :action=>:new
   end
 
   def edit

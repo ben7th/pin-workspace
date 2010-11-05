@@ -17,6 +17,6 @@
       .fleft.font14.bold
         工作空间(#{@workspaces.count})
       .fright
-        =minibutton_remote "新建工作空间",:url=>new_workspace_path,:method=>:get
+        =link_to "<span>新建工作空间</span>",new_workspace_path,:class=>"minibutton"
     .workspace-list
       -mplist @workspaces,:for=>Workspace
