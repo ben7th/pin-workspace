@@ -1,5 +1,5 @@
 class WorkspacesController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required,:except=>[:list]
   before_filter :per_load
   def per_load
     @workspace = Workspace.find(params[:id]) if params[:id]
@@ -10,6 +10,14 @@ class WorkspacesController < ApplicationController
     respond_to do |format|
       format.json { render :text=>@workspaces.to_json}
       format.any
+    end
+  end
+
+  def list
+    @workspaces = User.find(params[:req_user_id]).workspaces
+    respond_to do |format|
+      format.json { render :text=>@workspaces.to_json}
+      format.xml { render :text=>@workspaces.to_xml}
     end
   end
 

@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing or commenting them out if you're using named routes and resources.
 
   map.root :controller=>"workspaces"
-  map.resources :workspaces do |workspace|
+  map.resources :workspaces,:collection=>{:list=>:get} do |workspace|
     workspace.resources :file_entries
     workspace.resources :memberships,
       :collection=>{:add_members_form=>:get,:add_members=>:post,:invite_members_form=>:get,:invite_members=>:post,
