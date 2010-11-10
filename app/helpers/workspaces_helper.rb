@@ -39,7 +39,16 @@ module WorkspacesHelper
   end
 
   def document_link(document)
-    link_to document.title,pin_url_for('discuss',"workspaces/#{document.discussion.workspace.id}/documents/#{document.id}")
+    title = document.title
+
+    match_data = title.match(/<bundle>.*<\/bundle>(.*)/)
+    if match_data
+      bundle_title = match_data[1]
+      bundle_title = "无标题" if bundle_title.blank?
+      title = "bundle(#{bundle_title})"
+    end
+
+    link_to title,pin_url_for('discuss',"workspaces/#{document.discussion.workspace.id}/documents/#{document.id}")
   end
 
   def workspace_link(workspace)
